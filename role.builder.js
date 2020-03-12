@@ -1,8 +1,11 @@
 
-var roleBuilder = {
+var roleBuilder = 
+{
 
     /** @param {Creep} creep **/
     run: function(creep) {
+
+        Game.rooms['W8N6'].createConstructionSite(creep.pos, STRUCTURE_ROAD);
 
 	    if(creep.memory.building && creep.store[RESOURCE_ENERGY] == 0) {
             creep.memory.building = false;
@@ -16,8 +19,9 @@ var roleBuilder = {
 	    if(creep.memory.building) {
 	        var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
             if(targets.length) {
+                targets.sort(function(a,b){return (a.progress - a.progressTotal) > (b.progress - b.progressTotal) ? -1 : 1});
                 if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                    creep.moveTo(targets[0], {reusePath: 10});
                 }
             }
 	    }
